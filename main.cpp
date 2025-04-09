@@ -1,15 +1,9 @@
 #include <iostream>
 #include "classes.hpp"
+
 using namespace std;
 
-transactionMaker make(3);
-
-void autoPopulate()
-{
-    make.addTransaction("02-01-2024", "Groceries", 50.75);
-    make.addTransaction("02-02-2024", "Entertainment", 120.00);
-    make.addTransaction("02-03-2024", "Rent", 950.00);
-}
+transactionMaker make(5);
 
 void printEndl()
 {
@@ -22,7 +16,7 @@ int main()
     bool go = true;
     string goAns;
 
-    autoPopulate(); // Prepopulate transactions
+    make.loadFromFile("info.json");
 
     while (go)
     {
@@ -66,7 +60,6 @@ int main()
         }
         else if (ans == "5")
         {
-            go = false;
             break;
         }
         else
@@ -80,6 +73,7 @@ int main()
             cin >> goAns;
             if (goAns != "Y" && goAns != "y")
             {
+                make.saveToFile("info.json");
                 go = false;
             }
         }

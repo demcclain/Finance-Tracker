@@ -1,6 +1,11 @@
 #include<iostream>
 #include<string>
+#include <fstream>
+
 using namespace std;
+
+#include "json.hpp"
+using json = nlohmann::json;
 
 // PART 1
 struct transaction
@@ -181,6 +186,92 @@ public:
         if (count == 0)
             return -1;                     // No transactions yet
         return transactions[count - 1].id; // Last transaction’s ID
+    }
+
+    void saveToFile(const string &filename = "info.json")
+    {
+        json j;
+
+        //loop for adding to a file
+        for (int i = 0; i < count; ++i)
+        {
+            j["transactions"].push_back({{"id", transactions[i].id},
+                                        {"date", transactions[i].date},
+                                        {"category", transactions[i].category},
+                                        {"amount", transactions[i].amount}});
+        }
+        j["nextID"] = nextID; //incrementing
+
+        ofstream file(filename);
+        if (file.is_open())
+        {
+            file << j.dump(4);
+            file.close();
+            cout << "Data saved to " << filename << endl;
+        }
+        else
+        {
+            cout << "Failed to save to file: " << filename << endl;
+        }
+    }
+
+    void loadFromFile(const string &filename = "info.json")
+    {
+        ifstream file(filename);
+        if (!file.is_open())
+        {
+            cout << "No existing file found. Starting fresh." << endl;
+            return;
+        }
+
+        // Check if file is empty
+        file.seekg(0, ios::end);
+        if (file.tellg() == 0)
+        {
+            cout << "File is empty. No transactions to load." << endl;
+            file.close();
+            return;
+        }
+
+        // Return to beginning and parse
+        file.seekg(0, ios::beg);
+        json j;
+        try
+        {
+            file >> j;
+        }
+        catch (json::parse_error &e)
+        {
+            cout << "Error parsing JSON: " << e.what() << endl;
+            file.close();
+            return;
+        }
+
+        file.close();
+
+        count = 0;
+        nextID = j.value("nextID", 1);
+
+        for (const auto &item : j["transactions"])
+        {
+            if (isFull())
+            {
+                capacity *= 2;
+                transaction *newTransactions = new transaction[capacity];
+                for (int i = 0; i < count; ++i)
+                    newTransactions[i] = transactions[i];
+                delete[] transactions;
+                transactions = newTransactions;
+            }
+
+            transactions[count++] = transaction(
+                item["id"].get<int>(),
+                item["date"].get<string>(),
+                item["category"].get<string>(),
+                item["amount"].get<float>());
+        }
+
+        cout << "Loaded " << count << " transactions from " << filename << endl;
     }
 };
 
