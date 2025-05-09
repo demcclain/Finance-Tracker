@@ -58,7 +58,7 @@ cd Finance-Tracker
 ```
 * Compile the code
 ```bash
-g++ -o main.cpp app
+g++ -o app main.cpp
 ```
 * Execute the compiled program
 ```bash
@@ -73,7 +73,8 @@ g++ -o main.cpp app
 2) Edit Transaction
 3) Display Transactions
 4) Delete Transactions
-5) Exit
+5) Display by Category
+6) Exit
 > 1
 
 Date of your transaction (MM-DD-YYYY):
