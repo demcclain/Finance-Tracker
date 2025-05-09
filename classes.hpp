@@ -113,6 +113,33 @@ public:
         cout << "Transaction not found!" << endl;
     }
 
+    void displayByCategory(string searchCategory)
+    {
+        bool found = false;
+        cout << "Transactions in category: " << searchCategory << endl;
+        cout << "-------------------------------------------------" << endl;
+
+        for (int i = 0; i < count; ++i)
+        {
+            if (transactions[i].category == searchCategory)
+            {
+                cout << "ID: " << transactions[i].id << endl
+                    << "Date: " << transactions[i].date << endl
+                    << "Amount: " << transactions[i].amount << endl
+                    << "Category: " << transactions[i].category << endl
+                    << endl;
+                found = true;
+            }
+        }
+
+        if (!found)
+        {
+            cout << "No transactions found in category: " << searchCategory << endl;
+        }
+
+        cout << "-------------------------------------------------" << endl;
+    }
+
     // simple display array, just outputs the given information
     void displayTransactions()
     {

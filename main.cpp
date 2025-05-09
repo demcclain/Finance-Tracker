@@ -24,7 +24,8 @@ int main()
             << "2) Edit Transaction " << endl
             << "3) Display Transactions " << endl
             << "4) Delete Transactions" << endl
-            << "5) Exit" << endl;
+            << "5) Display by Category" << endl
+            << "6) Exit" << endl;
         cin >> ans;
 
         if (ans == "1")
@@ -59,6 +60,15 @@ int main()
             make.displayTransactions();
         }
         else if (ans == "5")
+        {
+            string searchCat;
+            cin.ignore();
+            cout << "Enter category to search: ";
+            getline(cin, searchCat);
+            make.displayByCategory(searchCat);
+        }
+
+        else if (ans == "6")
         {
             break;
         }
